@@ -4,6 +4,8 @@ import com.fullstack.messenger.dto.LoginRequestDTO;
 import com.fullstack.messenger.dto.LoginResponseDTO;
 import com.fullstack.messenger.dto.RegisterRequestDTO;
 import com.fullstack.messenger.dto.UserDTO;
+import com.fullstack.messenger.model.User;
+import com.fullstack.messenger.repository.UserRepository;
 import com.fullstack.messenger.service.AuthenticationService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class AuthController
 {
     @Autowired
     public AuthenticationService authenticationService;
+    @Autowired
+    public UserRepository userRepository;
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> signup(@RequestBody RegisterRequestDTO registerRequestDTO){
         return ResponseEntity.ok(authenticationService.signup(registerRequestDTO));
@@ -44,6 +48,20 @@ public class AuthController
         @GetMapping("/getcurrentuser")
         public ResponseEntity<?> getCurrentUser(Authentication authentication){
             if(authentication==null)return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("USER UNAI=UTHOIZED");
+            String username=authentication.name();
+            User user = userRepository.findByUsername(username).orElsethrow(()->
+                    new RuntimeException("User not found"));
+            return ResponseEntity.ok(convertToUserDTO(user));//returning the userDtO , not gonnal return the user directly,
+            //first will convert user to userDTO
         }
+        public UserDTO convertToUserDTO(User user){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setUsername(user.getUsername());
+        return userDTO;
+        }
+
+
 
 }
