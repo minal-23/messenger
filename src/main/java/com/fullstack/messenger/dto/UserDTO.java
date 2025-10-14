@@ -10,7 +10,7 @@ import lombok.Data;
 public class UserDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Long id;
     @Column(nullable = false,unique = true)
     String username;
     @Column(unique = true,nullable = false)

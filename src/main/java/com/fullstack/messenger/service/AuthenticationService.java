@@ -8,10 +8,17 @@ import com.fullstack.messenger.jwt.JWTService;
 import com.fullstack.messenger.model.User;
 import com.fullstack.messenger.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService
@@ -46,9 +53,24 @@ public class AuthenticationService
                 .userDTO(convertToUserDTO(user))
                 .build();
     }
-    public String logout(){
+    public ResponseEntity<String> logout(){
+        ResponseCookie responseCookie= ResponseCookie.from("JWT","")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,responseCookie.toString())
+                .body("logged out successfully");
 
     }
+//    public Map<String,Object> getOnlineUsers(){
+//        List<User> userList=userRepository.findByIsOnlineTrue();
+//        Map<String,Object> onlineUsers = userList.stream().collect(Collectors.toMap(User::getUsername,user));
+//        return onlineUsers;
+//
+//    }
     public UserDTO convertToUserDTO(User user){
         UserDTO userDTO=new UserDTO();
         userDTO.setEmail(user.getEmail());

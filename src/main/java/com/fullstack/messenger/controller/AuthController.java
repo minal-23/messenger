@@ -15,6 +15,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController
@@ -31,6 +33,7 @@ public class AuthController
         public ResponseEntity<UserDTO> login(@RequestBody LoginRequestDTO loginRequestDTO){
         LoginResponseDTO loginResponseDTO=authenticationService.login(loginRequestDTO);
         ResponseCookie responseCookie=ResponseCookie.from("JWT",loginResponseDTO.getToken())
+                //fetch cookiee from cached cookie as JWT
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -45,11 +48,17 @@ public class AuthController
         public ResponseEntity<String> logout(){
         return authenticationService.logout();
         }
+//        @GetMapping("/getonlineusers")
+//        public ResponseEntity<Map<String,Object>> getOnlineUsers(){
+//            return ResponseEntity.ok(authenticationService.getOnlineUsers());
+//            }
+
+
         @GetMapping("/getcurrentuser")
         public ResponseEntity<?> getCurrentUser(Authentication authentication){
             if(authentication==null)return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("USER UNAI=UTHOIZED");
             String username=authentication.name();
-            User user = userRepository.findByUsername(username).orElsethrow(()->
+            User user = userRepository.findByUserName(username).orElseThrow(()->
                     new RuntimeException("User not found"));
             return ResponseEntity.ok(convertToUserDTO(user));//returning the userDtO , not gonnal return the user directly,
             //first will convert user to userDTO
