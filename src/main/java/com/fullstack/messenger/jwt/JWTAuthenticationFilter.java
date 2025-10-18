@@ -53,16 +53,20 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         //if i get a valid jwt then extract userId
         userId=jwtService.extractUserId(jwtToken);
         //if userId is valid
-        if(userId!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            var userDetails=userRepository.findById(userId).orElseThrow(()-> new RuntimeException("unser not found"));
-            if(jwtService.isTokenValid(jwtToken,userDetails)){
-                UsernamePasswordAuthenticationToken authToken=
-                        new UsernamePasswordAuthenticationToken(userDetails,null, Collections.emptyList());
+        if(userId != null && SecurityContextHolder.getContext().getAuthentication() == null){
+
+            var userDetails = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+            if(jwtService.isTokenValid(jwtToken, userDetails)){
+
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, Collections.emptyList());
+
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                //SecurityContextHolder=central place with authentiacted users, so which means i have authenticated the user , now you save this details
-                //getAuthentication is null so i am setting it up
             }
+
         }
         filterChain.doFilter(request,response);
         return;

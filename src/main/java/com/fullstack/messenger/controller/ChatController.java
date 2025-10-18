@@ -34,7 +34,7 @@ public class ChatController
             //a thousand members are present and the server wants to know which user ischatting hence storing it in the session
             userService.setUserOnlineStatus(chatMessage.getSender(),true);//to show the user as online
             System.out.println("User Added Successfully"+chatMessage.getSender()+"with SeesionId"+headerAccessor.getSessionId());
-            chatMessage.setTimeStamp(LocalDateTime.now());//time when user came online
+            chatMessage.setTimestamp(LocalDateTime.now());//time when user came online
             if(chatMessage.getContent()==null)chatMessage.setContent("");
             return (ChatMessage) chatMessageRepository.save(chatMessage);
 
@@ -47,8 +47,8 @@ public class ChatController
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage)
     {
         if(userService.userExists(chatMessage.getSender())){
-            if(chatMessage.getTimeStamp()==null){
-                chatMessage.setTimeStamp(LocalDateTime.now());
+            if(chatMessage.getTimestamp()==null){
+                chatMessage.setTimestamp(LocalDateTime.now());
             }
             if(chatMessage.getContent()==null){
                 chatMessage.setContent("");
@@ -63,8 +63,8 @@ public class ChatController
     {
         //to set the reciient destnation4//unique user name
          if(userService.userExists(chatMessage.getSender()) && userService.userExists(chatMessage.getRecipient())) {
-             if (chatMessage.getTimeStamp() == null) {
-                 chatMessage.setTimeStamp(LocalDateTime.now());
+             if (chatMessage.getTimestamp() == null) {
+                 chatMessage.setTimestamp(LocalDateTime.now());
              }
              if (chatMessage.getContent() == null) {
                  chatMessage.setContent("");

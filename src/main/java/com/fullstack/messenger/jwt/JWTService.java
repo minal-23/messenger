@@ -21,8 +21,9 @@ public class JWTService {
     private Long jwtExpiration;
     //method to extract userId
     public Long extractUserId(String jwtToken){//extracting userId from jwt token
-        String userIdStr=extractClaim(jwtToken,claims->claims.get("userId",String.class));
-        return userIdStr !=null?Long.parseLong(userIdStr):null;
+//        String userIdStr=extractClaim(jwtToken,claims->claims.get("userId",String.class));
+//        return userIdStr !=null?Long.parseLong(userIdStr):null;
+        return extractClaim(jwtToken, claims -> claims.get("userId", Long.class));
 
     }
     private <T> T  extractClaim(String jwtToken, Function<Claims,T> claimsResolver)

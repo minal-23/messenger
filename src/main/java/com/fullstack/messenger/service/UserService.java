@@ -10,7 +10,7 @@ public class UserService
     @Autowired
     private UserRepository userRepository;
     public boolean userExists(String username){
-        return userRepository.existsByUserName(username);
+        return userRepository.existsByUsername(username);
     }
     public void setUserOnlineStatus(String username,boolean isOnline){
         userRepository.userOnlineStatus(username,isOnline);

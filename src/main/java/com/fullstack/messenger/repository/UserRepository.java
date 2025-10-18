@@ -8,16 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Long>
 {
-    public boolean existsByUserName(String userName);
+    public boolean existsByUsername(String username);
+
+    public Optional<User> findByUsername(String username);
+
+    List<User> findByIsOnlineTrue();
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isOnline = :isOnline WHERE u.username= :username")
-    public void userOnlineStatus(@Param("username") String username, @Param("isOnline") boolean isOnline);
-    public Optional<User> findByUserName(String username);
+    @Query("UPDATE User u SET u.isOnline = :isOnline WHERE u.username = :username")
+    public void userOnlineStatus(@Param("username") String username, @Param("isOnline") Boolean isOnline);
 
 }

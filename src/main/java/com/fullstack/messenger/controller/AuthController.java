@@ -52,13 +52,16 @@ public class AuthController
 //        public ResponseEntity<Map<String,Object>> getOnlineUsers(){
 //            return ResponseEntity.ok(authenticationService.getOnlineUsers());
 //            }
-
+@GetMapping("/getonlineusers")
+public ResponseEntity<Map<String, Object>> getOnlineUsers(){
+    return ResponseEntity.ok(authenticationService.getOnlineUsers());
+}
 
         @GetMapping("/getcurrentuser")
         public ResponseEntity<?> getCurrentUser(Authentication authentication){
             if(authentication==null)return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("USER UNAI=UTHOIZED");
             String username=authentication.name();
-            User user = userRepository.findByUserName(username).orElseThrow(()->
+            User user = userRepository.findByUsername(username).orElseThrow(()->
                     new RuntimeException("User not found"));
             return ResponseEntity.ok(convertToUserDTO(user));//returning the userDtO , not gonnal return the user directly,
             //first will convert user to userDTO
