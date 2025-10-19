@@ -22,6 +22,7 @@ public class ChatController
     private ChatMessageRepository chatMessageRepository;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    //mapped as app/chat.addUser
     @MessageMapping("/chat.addUser")//WEB SOCKET DESTINATION
     @SendTo("/topic/public")//
     //after use logs in this method is hit
@@ -58,6 +59,7 @@ public class ChatController
         return null;
 
     }
+    //recieves a message and send here
     @MessageMapping("/chat.sendPrivateMessage")//dynamic subscription
     public void sendPrivateMessage(@Payload ChatMessage chatMessage,SimpMessageHeaderAccessor headerAccessor)
     {
@@ -77,6 +79,7 @@ public class ChatController
                  //setting the path
                  String recipientDestn = "/user/" + chatMessage.getRecipient() + "/queue/private";
                  System.out.println("sent message to recipent" + recipientDestn);
+                 //sends message here below line
                  messagingTemplate.convertAndSend(recipientDestn,savedMessage);
                  //sender should also sees the message on the right side of the chat
                  String senderDestn="/user/" + chatMessage.getSender() + "/queue/private";
