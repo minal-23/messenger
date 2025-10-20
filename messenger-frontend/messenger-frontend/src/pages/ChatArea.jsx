@@ -30,7 +30,8 @@ const ChatArea = () => {
     const messagesEndRef = useRef(null);
     const typingTimeoutRef = useRef(null);
 
-    const emojis = ['😀', '😂', '😍', '🤔', '👍', '❤️', '🎉', '🔥', '😎', '⭐', '✨', '💯'];
+    const emojis = ['😀', '😂', '😍', '🤔', '👍', '❤️', '🎉', '🔥', '😎', '⭐', '✨', '💯','🤦‍♀️'];
+//windows+semicolon opens up emoji panel
 
     if (!currentUser) {
         return null;
@@ -308,6 +309,15 @@ const ChatArea = () => {
                 </div>
 
                 <div className="input-area">
+                {showEmojiPicker && (
+                                        <div className="emoji-picker">
+                                            {emojis.map(emoji => (
+                                                <button key={emoji} onClick={() => addEmoji(emoji)}>
+                                                    {emoji}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                     <form onSubmit={sendMessage} className="message-form">
                         <button
                             type="button"
